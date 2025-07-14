@@ -1,0 +1,8 @@
+{
+  "name": " KaiX v1.2",
+  "description": "KaiX single page view",
+  "requestFramePermissions": [
+    "microphone"
+  ],
+  "prompt": ""
+}
