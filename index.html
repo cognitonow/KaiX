@@ -21,6 +21,15 @@
 }
 </script>
 <link rel="stylesheet" href="/index.css">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-V4W3PXVF6Y"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-V4W3PXVF6Y');
+</script>
 </head>
 <body>
 
@@ -681,7 +690,7 @@
     </div>
 
     <script type="module">
-        import { GoogleGenAI } from "@google/genai";
+        import { GoogleGenerativeAI } from "@google/generative-ai";
 
         document.addEventListener('DOMContentLoaded', () => {
 
@@ -1526,12 +1535,13 @@
                             // --- Local API Call ---
                             this.logActivity('Using local API key for client-side call.');
                             try {
-                                const ai = new GoogleGenAI({ apiKey: localApiKey });
-                                const response = await ai.models.generateContent({
-                                    model: "gemini-2.5-flash",
+                                const genAI = new GoogleGenerativeAI(localApiKey);
+                                const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+                                const result = await model.generateContent({
                                     contents: payload.contents,
                                 });
-                                aiResponse = response.text;
+                                const response = result.response;
+                                aiResponse = response.text();
                                 this.logActivity('Local API call successful.');
                             } catch (error) {
                                 console.error("Error with local Gemini API call:", error);
