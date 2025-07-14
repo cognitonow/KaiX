@@ -1,11 +1,10 @@
-import { GoogleGenAI } from "@google/genai";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
 export default async function handler(req, res) {
     if (req.method !== 'POST') {
         return res.status(405).json({ error: 'Method Not Allowed' });
     }
 
-    // The client will now send the full 'contents' array for the conversation
     const { contents } = req.body;
 
     if (!contents) {
@@ -19,14 +18,15 @@ export default async function handler(req, res) {
     }
 
     try {
-        const ai = new GoogleGenAI({ apiKey: API_KEY });
-        
-        const response = await ai.models.generateContent({
-            model: "gemini-2.5-flash",
-            contents: contents, // Pass the client-constructed contents directly
+        const genAI = new GoogleGenerativeAI(API_KEY);
+        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+        const result = await model.generateContent({
+            contents: contents,
         });
 
-        const aiResponse = response.text;
+        const response = result.response;
+        const aiResponse = response.text();
         
         return res.status(200).json({ text: aiResponse });
 
